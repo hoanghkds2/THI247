@@ -38,16 +38,13 @@
                                         <div class="middle" onclick="UpdateImage()">
                                             <i class="fas fa-pen"></i>
                                         </div>
-                                        <c:if test="${not empty mes}">
-                                        <p style="color:red">${mes}</p>
-                                    </c:if>
                                     </div>
                                     <style>
                                         .middle {
                                         transition: .5s ease;
                                         opacity: 0;
                                         position: absolute;
-                                        top: 15%;
+                                        top: 17%;
                                         left: 50%;
                                         transform: translate(-50%, -50%);
                                         -ms-transform: translate(-50%, -50%);
@@ -114,6 +111,9 @@
                                     <div class="col-sm-9 text-secondary">
                                         <input type="text" class="form-control" name="username" value="<%=user.getUsername()%>">
                                     </div>
+                                    <c:if test="${not empty message_username}">
+                                        <p style="color:red">${message_username}</p>
+                                    </c:if>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-sm-3">

@@ -34,6 +34,10 @@ public class UpdateController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String fullname = request.getParameter("fullname");
         String username = request.getParameter("username");
+        if(new UserDAO().findByUserName(username) != null){
+            request.setAttribute("message_username", "Username already exists");
+            request.getRequestDispatcher("editprofile.jsp").forward(request, response);
+        }
         String oldPassword = request.getParameter("oldPassword");
         if(oldPassword == null) oldPassword = "";
         String newPassword = request.getParameter("newPassword");
