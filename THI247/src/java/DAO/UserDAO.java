@@ -104,15 +104,37 @@ public class UserDAO extends DBConnection{
     }
     
     public void updateInfo(String email, String username, String fullname, String password){
-        
-        String query = "UPDATE Users SET username = ?, fullname = ?, password = ? WHERE email = ?";
+        String query = "UPDATE Users SET username = ? , fullname = ? , password = ? WHERE email=?";
         try (Connection conn = getConnection();
             PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setString(1, username);
             ps.setString(2, fullname);
             ps.setString(3, password);
             ps.setString(4, email);
-            try (ResultSet rs = ps.executeQuery()) {
+            System.out.println(query);
+            try{
+                ps.executeUpdate();
+            }
+            catch(Exception e){
+                System.out.println(e);
+            }
+        } catch (Exception e) {
+            System.out.println("SDASD");
+        }
+    }
+    
+    public void updateAvatar(String url, String email){
+        String query = "UPDATE Users SET avatar=? WHERE email=?";
+        try (Connection conn = getConnection();
+            PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, url);
+            ps.setString(2, email);
+            System.out.println(query);
+            try{
+                ps.executeUpdate();
+            }
+            catch(Exception e){
+                System.out.println(e);
             }
         } catch (Exception e) {
             System.out.println("SDASD");
@@ -228,7 +250,6 @@ public class UserDAO extends DBConnection{
     }*/
     public static void main(String[] args) {
         UserDAO userDAO = new UserDAO();
-        Users useer = userDAO.findByEmail("anhminhnamly1@gmail.com");
-        System.out.println(useer.toString());
+        userDAO.updateAvatar("img/default.png", "g.candy0506@gmail.com");
     }
 }

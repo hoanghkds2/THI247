@@ -83,7 +83,7 @@
                     }
                 </style>
           <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-            <img src="<%=user.getAvatarURL()%>" alt="Profile" width="50px" class="rounded-circle">
+            <img src="<%=user.getAvatarURL()%>" alt="Profile" width="50" height="50" class="rounded-circle">
             <span class="d-none d-md-block dropdown-toggle ps-2"><%=user.getUsername()%></span>
           </a><!-- End Profile Iamge Icon -->
 

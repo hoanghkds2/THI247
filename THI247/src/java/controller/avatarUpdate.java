@@ -8,18 +8,25 @@ import DAO.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.Part;
+import java.io.File;
 import model.Users;
 
 /**
  *
  * @author GoldCandy
  */
-public class UpdateController extends HttpServlet {
-
+@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB
+                 maxFileSize = 1024 * 1024 * 10,       // 10MB
+                 maxRequestSize = 1024 * 1024 * 50)    // 50MB
+public class avatarUpdate extends HttpServlet {
+    private static final long serialVersionUID = 1L;
+    private static final String UPLOAD_DIRECTORY = "uploads/avaUploads";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -32,42 +39,17 @@ public class UpdateController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String fullname = request.getParameter("fullname");
-        String username = request.getParameter("username");
-        String oldPassword = request.getParameter("oldPassword");
-        if(oldPassword == null) oldPassword = "";
-        String newPassword = request.getParameter("newPassword");
-        if(newPassword == null) newPassword = "";
-        String confirmPassword = request.getParameter("confirmPassword");
-        if(confirmPassword == null) confirmPassword = "";
-        
-        HttpSession session = request.getSession();
-        Users user = (Users)session.getAttribute("currentUser");
-        
-        if(!oldPassword.isEmpty() && !newPassword.isEmpty() && !confirmPassword.isEmpty()){
-            if(!oldPassword.equals(user.getPassword())){
-                request.setAttribute("message_password", "Wrong password");
-                request.getRequestDispatcher("editprofile.jsp").forward(request, response);
-            }
-            if(!newPassword.equals(confirmPassword)){
-                request.setAttribute("message_confirm", "Password is not compatible");
-                request.getRequestDispatcher("editprofile.jsp").forward(request, response);
-            }
-            else{
-                new UserDAO().updateInfo(user.getEmail(), username, fullname, newPassword);
-                request.setAttribute("message", "Success");
-                user = new UserDAO().findByEmail(user.getEmail());
-                session.setAttribute("currentUser", user);
-                request.getRequestDispatcher("profile.jsp").forward(request, response);
+    }
+    
+    private String getFileName(Part part){
+        String contentDisposition = part.getHeader("content-disposition");
+        String[] tokens = contentDisposition.split(";");
+        for(String token: tokens){
+            if(token.trim().startsWith("filename")){
+                return token.substring(token.indexOf("=") + 2, token.length() - 1);
             }
         }
-        else{
-            new UserDAO().updateInfo(user.getEmail(), username, fullname, user.getPassword());
-            request.setAttribute("message", "Successe");
-            user = new UserDAO().findByEmail(user.getEmail());
-            session.setAttribute("currentUser", user);
-            request.getRequestDispatcher("profile.jsp").forward(request, response);
-        }
+        return null;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -97,6 +79,26 @@ public class UpdateController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+        String uploadPath = getServletContext().getRealPath("") + File.separator + UPLOAD_DIRECTORY;
+        File uploadDir = new File(uploadPath);
+        HttpSession session = request.getSession();
+        Users user = (Users)session.getAttribute("currentUser");
+        
+        if(!uploadDir.exists()){
+            uploadDir.mkdir();
+        }
+        
+        for(Part part: request.getParts()){
+            String fileName = getFileName(part);
+            if(fileName != null && !fileName.isEmpty()){
+                String filePath = uploadPath + File.separator + fileName;
+                part.write(filePath);
+                String url = UPLOAD_DIRECTORY + "/" + fileName;
+                new UserDAO().updateAvatar(url, user.getEmail());
+                session.setAttribute("currentUser", new UserDAO().findByEmail(user.getEmail()));
+                response.sendRedirect("editprofile.jsp");
+            }
+        }
     }
 
     /**

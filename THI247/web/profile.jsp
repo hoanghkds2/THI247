@@ -13,16 +13,16 @@
     <div class="container">
         <div class="main-body">
             <%
-            if(session.getAttribute("currentUser") != null){
-                Users user = (Users)session.getAttribute("currentUser");
-                String role;
-                if(user.getRole() == 1) role = "Admin";
-                else if(user.getRole() == 2) role = "Lecture";
-                else role = "Student";
-                String password = "";
-                for(int i = 0; i < user.getPassword().length(); i++){
-                    password += "*";
-                }
+                    Users user = (Users)session.getAttribute("currentUser");
+                    if(user != null){
+                    String role;
+                    if(user.getRole() == 1) role = "Admin";
+                    else if(user.getRole() == 2) role = "Lecture";
+                    else role = "Student";
+                    String password = "";
+                    for(int i = 0; i < user.getPassword().length(); i++){
+                        password += "*";
+                    }
             %>
         
               <!-- Breadcrumb -->
@@ -40,7 +40,7 @@
                   <div class="card">
                     <div class="card-body">
                       <div class="d-flex flex-column align-items-center text-center">
-                        <img src="<%=user.getAvatarURL()%>" alt="Admin" class="rounded-circle" width="150">
+                          <img src="<%=user.getAvatarURL()%>" alt="Admin" class="rounded-circle p-1 bg-primary" width="150" height="150">
                         <div class="mt-3">
                           <h4><%=user.getUsername()%></h4>
                           <p class="text-secondary mb-1"><%=role%></p>
@@ -181,16 +181,14 @@
                   </div> -->
     
     
-    <%
-        }
-    %>
                 </div>
               </div>
-    
+                        
             </div>
         </div>
-
-
+        <%
+            }
+        %>
 
     <jsp:include page="footer.jsp"></jsp:include>
 

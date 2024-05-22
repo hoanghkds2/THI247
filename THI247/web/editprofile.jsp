@@ -17,8 +17,8 @@
               <!-- /Breadcrumb -->
         <br><br>
          <%
-        if(session.getAttribute("currentUser") != null){
         Users user = (Users)session.getAttribute("currentUser");
+        if(user != null){
         String role;
         if(user.getRole() == 1) role = "Admin";
         else if(user.getRole() == 2) role = "Lecture";
@@ -30,14 +30,17 @@
                     <div class="col-lg-4">
                         <div class="card">
                             <div class="card-body">
-                                <form id="updateForm" action="imageUpdate" method="POST" enctype="multipart/form-data">
+                                <form id="updateForm" action="avatarUpdate" method="POST" enctype="multipart/form-data">
                                 <div class="d-flex flex-column align-items-center text-center">
                                     <div class="containers">
-                                        <input type="file" id="imgupload" accept="image/png, image/jpeg" style="display:none" onchange="submitForm()"/>
-                                        <img src="<%=user.getAvatarURL()%>" alt="Admin" class="rounded-circle p-1 bg-primary image" width="110" onclick="UpdateImage()">
-                                        <div class="middle">
+                                        <input type="file" name="file" id="imgupload" accept="image/png, image/jpeg" style="display:none" onchange="submitForm()"/>
+                                        <img src="<%=user.getAvatarURL()%>" alt="Admin" class="rounded-circle p-1 bg-primary image" width="150" height="150" onclick="UpdateImage()">
+                                        <div class="middle" onclick="UpdateImage()">
                                             <i class="fas fa-pen"></i>
                                         </div>
+                                        <c:if test="${not empty mes}">
+                                        <p style="color:red">${mes}</p>
+                                    </c:if>
                                     </div>
                                     <style>
                                         .middle {
@@ -103,7 +106,7 @@
                     <div class="col-lg-8">
                         <div class="card">
                             <div class="card-body">
-                                <form action="update" method="POST" enctype="multipart/form-data">
+                                <form action="update" method="POST">
                                 <div class="row mb-3">
                                     <div class="col-sm-3">
                                         <h6 class="mb-0">Username</h6>
