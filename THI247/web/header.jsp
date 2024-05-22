@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html" pageEncoding="UTF-8" import="DAO.*, java.util.*, model.*"%>
 <html lang="en">
 
 <head>
@@ -63,84 +63,57 @@
                     </div>
                     <a href="contact.jsp" class="nav-item nav-link">Contact</a>
                 </div>
-                <!-- <a href="" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">Join Now<i class="fa fa-arrow-right ms-3"></i></a> -->
+                <%
+                    if(session.getAttribute("currentUser") == null){
+                %>
+                 <a href="login.jsp" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">Join Now<i class="fa fa-arrow-right ms-3"></i></a> 
+                <%
+                    }
+                    else{
+                    Users user = (Users)session.getAttribute("currentUser");
+                    String role;
+                    if(user.getRole() == 1) role = "Admin";
+                    else if(user.getRole() == 2) role = "Lecture";
+                    else role = "Student";
+                %>
+            <li class="nav-item dropdown pe-3 no">
                 <style>
-                    .dropbtn {
-                        background-color: #3498DB;
-                        color: white;
-                        /* padding: 16px; */
-                        font-size: 16px;
-                        border: none;
-                        cursor: pointer;
-                    }
-
-                    .dropbtn:hover, .dropbtn:focus {
-                        background-color: #2980B9;
-                    }
-
-                    .dropdown {
-                        position: relative;
-                        display: inline-block;
-                    }
-
-                    .dropdown-content {
-                        display: none;
-                        position: absolute;
-                        background-color: #f1f1f1;
-                        min-width: 160px;
-                        overflow: auto;
-                        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-                        z-index: 1;
-                        position: absolute;
-                        right: 0;
-                        margin-top: 219px;
-                    }
-
-                    .dropdown-content a {
-                        color: black;
-                        padding: 12px 16px;
-                        text-decoration: none;
-                        display: block;
-                        text-align: center;
-                    }
-
-                    .dropdown a:hover {
-                        background-color: #ddd;
-                    }
-
-                    .show {
+                    .no{
                         display: block;
                     }
                 </style>
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXoMFtNYy-gfuvVnQkKSiDAmfYt0ynmaGz55WPNbUPZw&s" width="50px" role="button" onclick="myFunction()" class="dropbtn" alt="">
-                <div id="myDropdown" class="dropdown-content">
-                    <a href="profile.jsp">Profile</a>
-                    <a href="404.jsp">Payment</a>
-                    <a href="index.jsp">Log out</a>
-                </div>
+          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+            <img src="<%=user.getAvatarURL()%>" alt="Profile" width="50px" class="rounded-circle">
+            <span class="d-none d-md-block dropdown-toggle ps-2"><%=user.getUsername()%></span>
+          </a><!-- End Profile Iamge Icon -->
 
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+            <li class="dropdown-header">
+              <h6><%=user.getUsername()%></h6>
+              <span><%=role%></span>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
 
-                <script>
-                    /* When the user clicks on the button, 
-                     toggle between hiding and showing the dropdown content */
-                    function myFunction() {
-                        document.getElementById("myDropdown").classList.toggle("show");
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="profile.jsp">
+                <i class="bi bi-person"></i>
+                <span>My Profile</span>
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="#">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Sign Out</span>
+              </a>
+            </li>
+
+          </ul><!-- End Profile Dropdown Items -->
+        </li>
+                <%
                     }
-
-                    // Close the dropdown if the user clicks outside of it
-                    window.onclick = function (event) {
-                        if (!event.target.matches('.dropbtn')) {
-                            var dropdowns = document.getElementsByClassName("dropdown-content");
-                            var i;
-                            for (i = 0; i < dropdowns.length; i++) {
-                                var openDropdown = dropdowns[i];
-                                if (openDropdown.classList.contains('show')) {
-                                    openDropdown.classList.remove('show');
-                                }
-                            }
-                        }
-                    }
-                </script>
+                %>
             </div>
         </nav>
         <!-- Navbar End -->

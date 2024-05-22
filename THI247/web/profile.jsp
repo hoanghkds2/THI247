@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html" pageEncoding="UTF-8" import="DAO.*, java.util.*, model.*"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <style>
         input {
             height: 50px;
@@ -11,6 +12,17 @@
 
     <div class="container">
         <div class="main-body">
+            <%
+            Users user = (Users)session.getAttribute("currentUser");
+            String role;
+            if(user.getRole() == 1) role = "Admin";
+            else if(user.getRole() == 2) role = "Lecture";
+            else role = "Student";
+            String password = "";
+            for(int i = 0; i < user.getPassword().length(); i++){
+                password += "*";
+            }
+            %>
         
               <!-- Breadcrumb -->
               <!-- <nav aria-label="breadcrumb" class="main-breadcrumb">
@@ -27,11 +39,10 @@
                   <div class="card">
                     <div class="card-body">
                       <div class="d-flex flex-column align-items-center text-center">
-                        <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="150">
+                        <img src="<%=user.getAvatarURL()%>" alt="Admin" class="rounded-circle" width="150">
                         <div class="mt-3">
-                          <h4>John Doe</h4>
-                          <p class="text-secondary mb-1">Full Stack Developer</p>
-                          <p class="text-muted font-size-sm">Bay Area, San Francisco, CA</p>
+                          <h4><%=user.getUsername()%></h4>
+                          <p class="text-secondary mb-1"><%=role%></p>
                         </div>
                       </div>
                     </div>
@@ -66,10 +77,19 @@
                     <div class="card-body">
                       <div class="row">
                         <div class="col-sm-3">
+                          <h6 class="mb-0">Username</h6>
+                        </div>
+                        <div class="col-sm-9 text-secondary">
+                          <%=user.getUsername()%>
+                        </div>
+                      </div>
+                        <hr>
+                        <div class="row">
+                        <div class="col-sm-3">
                           <h6 class="mb-0">Full Name</h6>
                         </div>
                         <div class="col-sm-9 text-secondary">
-                          Kenneth Valdez
+                          <%=user.getFullname()%>
                         </div>
                       </div>
                       <hr>
@@ -78,40 +98,25 @@
                           <h6 class="mb-0">Email</h6>
                         </div>
                         <div class="col-sm-9 text-secondary">
-                          fip@jukmuh.al
+                          <%=user.getEmail()%>
                         </div>
                       </div>
-                      <hr>
-                      <div class="row">
+                        <hr>
+                        <div class="row">
                         <div class="col-sm-3">
-                          <h6 class="mb-0">Phone</h6>
+                          <h6 class="mb-0">Password</h6>
                         </div>
                         <div class="col-sm-9 text-secondary">
-                          (239) 816-9029
+                            <%=password%>
                         </div>
                       </div>
-                      <hr>
-                      <div class="row">
-                        <div class="col-sm-3">
-                          <h6 class="mb-0">Mobile</h6>
-                        </div>
-                        <div class="col-sm-9 text-secondary">
-                          (320) 380-4539
-                        </div>
-                      </div>
-                      <hr>
-                      <div class="row">
-                        <div class="col-sm-3">
-                          <h6 class="mb-0">Address</h6>
-                        </div>
-                        <div class="col-sm-9 text-secondary">
-                          Bay Area, San Francisco, CA
-                        </div>
-                      </div>
-                      <hr>
+                        <hr>
+                        <c:if test="${not empty message}">
+                                <p style="color:greenyellow">${message}</p>
+                        </c:if>
                       <div class="row">
                         <div class="col-sm-12">
-                          <a class="btn btn-info " target="__blank" href="editprofile.html">Edit</a>
+                          <a class="btn btn-info " href="editprofile.jsp">Edit</a>
                         </div>
                       </div>
                     </div>

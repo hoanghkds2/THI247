@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html" pageEncoding="UTF-8" import="DAO.*, java.util.*, model.*"%>
 <jsp:include page="header.jsp"></jsp:include>
 <style>
         input {
@@ -16,7 +16,13 @@
               </nav> -->
               <!-- /Breadcrumb -->
         <br><br>
-         
+         <%
+         Users user = (Users)session.getAttribute("currentUser");
+        String role;
+        if(user.getRole() == 1) role = "Admin";
+        else if(user.getRole() == 2) role = "Lecture";
+        else role = "Student";
+         %>
         <div class="container">
             <div class="main-body">
                 <div class="row">
@@ -24,11 +30,36 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="d-flex flex-column align-items-center text-center">
-                                    <img src="https://bootdey.com/img/Content/avatar/avatar6.png" alt="Admin" class="rounded-circle p-1 bg-primary" width="110">
+                                    <div class="containers">
+                                        <img src="<%=user.getAvatarURL()%>" alt="Admin" class="rounded-circle p-1 bg-primary image" width="110">
+                                        <div class="middle">
+                                            <i class="fas fa-pen"></i>
+                                        </div>
+                                    </div>
+                                    <style>
+                                        .middle {
+                                        transition: .5s ease;
+                                        opacity: 0;
+                                        position: absolute;
+                                        top: 15%;
+                                        left: 50%;
+                                        transform: translate(-50%, -50%);
+                                        -ms-transform: translate(-50%, -50%);
+                                        text-align: center;
+                                      }
+                                      .containers:hover .image {
+                                        opacity: 0.3;
+                                        cursor: pointer;
+                                      }
+
+                                      .containers:hover .middle {
+                                        opacity: 1;
+                                        cursor: pointer;
+                                      }
+                                    </style>
                                     <div class="mt-3">
-                                        <h4>xu ly o day</h4>
-                                        <p class="text-secondary mb-1">Full Stack Developer</p>
-                                        <p class="text-muted font-size-sm">Bay Area, San Francisco, CA</p>                                     
+                                        <h4><%=user.getUsername()%></h4>
+                                        <p class="text-secondary mb-1"><%=role%></p>                                   
                                     </div>
                                 </div>
                                 <hr class="my-4">
@@ -60,58 +91,66 @@
                     <div class="col-lg-8">
                         <div class="card">
                             <div class="card-body">
+                                <form action="update" method="POST">
+                                <div class="row mb-3">
+                                    <div class="col-sm-3">
+                                        <h6 class="mb-0">Username</h6>
+                                    </div>
+                                    <div class="col-sm-9 text-secondary">
+                                        <input type="text" class="form-control" name="username" value="<%=user.getUsername()%>">
+                                    </div>
+                                </div>
                                 <div class="row mb-3">
                                     <div class="col-sm-3">
                                         <h6 class="mb-0">Full Name</h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        <input type="text" class="form-control" value="John Doe">
+                                        <input type="text" class="form-control" name="fullname" value="<%=user.getFullname()%>">
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-sm-3">
-                                        <h6 class="mb-0">Email</h6>
+                                        <h6 class="mb-0">Old Password</h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        <input type="text" class="form-control" value="john@example.com">
+                                        <input type="password" class="form-control" name="oldPassword" value="">
+                                    </div>
+                                    <c:if test="${not empty message_password}">
+                                        <p style="color:red">${message_password}</p>
+                                    </c:if>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-sm-3">
+                                        <h6 class="mb-0">New Password</h6>
+                                    </div>
+                                    <div class="col-sm-9 text-secondary">
+                                        <input type="password" class="form-control" name="newPassword" value="">
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-sm-3">
-                                        <h6 class="mb-0">Phone</h6>
+                                        <h6 class="mb-0">Confirm Password</h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        <input type="text" class="form-control" value="(239) 816-9029">
+                                        <input type="password" class="form-control" name="confirmPassword" value="">
                                     </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <div class="col-sm-3">
-                                        <h6 class="mb-0">Mobile</h6>
-                                    </div>
-                                    <div class="col-sm-9 text-secondary">
-                                        <input type="text" class="form-control" value="(320) 380-4539">
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <div class="col-sm-3">
-                                        <h6 class="mb-0">Address</h6>
-                                    </div>
-                                    <div class="col-sm-9 text-secondary">
-                                        <input type="text" class="form-control" value="Bay Area, San Francisco, CA">
-                                    </div>
+                                    <c:if test="${not empty message_confirm}">
+                                        <p style="color:red">${message_confirm}</p>
+                                    </c:if>
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-3"></div>
                                     <div class="col-sm-9 text-secondary">
-                                        <input type="button" class="btn btn-primary px-4" value="Save Changes">
+                                        <input type="submit" class="btn btn-primary px-4" value="Save Changes">
                                     </div>
                                 </div>
+                            </form>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <jsp:include page="header.jsp"></jsp:include>
+        <jsp:include page="footer.jsp"></jsp:include>
     <!-- Back to Top -->
     <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
