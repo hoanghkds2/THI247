@@ -29,9 +29,11 @@
                     <div class="col-lg-4">
                         <div class="card">
                             <div class="card-body">
+                                <form id="updateForm" action="imageUpdate" method="POST" enctype="multipart/form-data">
                                 <div class="d-flex flex-column align-items-center text-center">
                                     <div class="containers">
-                                        <img src="<%=user.getAvatarURL()%>" alt="Admin" class="rounded-circle p-1 bg-primary image" width="110">
+                                        <input type="file" id="imgupload" accept="image/png, image/jpeg" style="display:none" onchange="submitForm()"/>
+                                        <img src="<%=user.getAvatarURL()%>" alt="Admin" class="rounded-circle p-1 bg-primary image" width="110" onclick="UpdateImage()">
                                         <div class="middle">
                                             <i class="fas fa-pen"></i>
                                         </div>
@@ -57,11 +59,20 @@
                                         cursor: pointer;
                                       }
                                     </style>
+                                    <script>
+                                        function UpdateImage(){
+                                            document.getElementById("imgupload").click();
+                                      }
+                                        function submitForm() { 
+                                          document.getElementById("updateForm").submit(); 
+                                      } 
+                                    </script>
                                     <div class="mt-3">
                                         <h4><%=user.getUsername()%></h4>
                                         <p class="text-secondary mb-1"><%=role%></p>                                   
                                     </div>
                                 </div>
+                                </form>
                                 <hr class="my-4">
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
@@ -91,7 +102,7 @@
                     <div class="col-lg-8">
                         <div class="card">
                             <div class="card-body">
-                                <form action="update" method="POST">
+                                <form action="update" method="POST" enctype="multipart/form-data">
                                 <div class="row mb-3">
                                     <div class="col-sm-3">
                                         <h6 class="mb-0">Username</h6>

@@ -112,7 +112,7 @@
                       </div>
                         <hr>
                         <c:if test="${not empty message}">
-                                <p style="color:greenyellow">${message}</p>
+                                <p style="color:green">${message}</p>
                         </c:if>
                       <div class="row">
                         <div class="col-sm-12">

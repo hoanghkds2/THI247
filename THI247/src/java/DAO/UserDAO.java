@@ -76,6 +76,33 @@ public class UserDAO extends DBConnection{
         return null;
     }
     
+    public Users findByUserName(String username) {
+        String query = "SELECT * FROM Users WHERE username=?";
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, username);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    int iD = rs.getInt("userID");
+                    String usernames = rs.getString("username");
+                    String fullname = rs.getString("fullname");
+                    String emails = rs.getString("email");
+                    int role = rs.getInt("roles");
+                    String avatarURL = rs.getString("avatar");
+                    int balance = rs.getInt("balance");
+                    String passwords = rs.getString("password");
+            
+                    Users us = new Users(iD, usernames, fullname, passwords, emails, role, avatarURL, balance);
+                    return us;
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("SDASD");
+        }
+        return null;
+    }
+    
     public void updateInfo(String email, String username, String fullname, String password){
         
         String query = "UPDATE Users SET username = ?, fullname = ?, password = ? WHERE email = ?";
@@ -92,13 +119,13 @@ public class UserDAO extends DBConnection{
         }
     }
 
-    public boolean registerUser(String username, String password, String email, boolean isAdmin) {
+    public boolean registerUser(String username, String password, String email, boolean isLecturer) {
         Connection conn = null;
         PreparedStatement stmt = null;
 
         try {
             conn = DBConnection.getConnection();
-            String sql = "INSERT INTO users (username, password, email, user_type) VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO users (username, password, email, roles, avatar) VALUES (?, ?, ?, ?, ?)";
 
             stmt = conn.prepareStatement(sql);
             stmt.setString(1, username);
@@ -106,8 +133,9 @@ public class UserDAO extends DBConnection{
             stmt.setString(3, email);
 
             // Xác định user_type dựa trên isAdmin
-            int userType = isAdmin ? 2 : 1; // Nếu là admin thì user_type = 2, ngược lại là user_type = 1
-            stmt.setInt(4, userType);
+            int role = isLecturer ? 2 : 3; // Nếu là lecturer thì user_type = 2, ngược lại là user_type = 1
+            stmt.setInt(4, role);
+            stmt.setString(5, "img/default.png");
 
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected > 0) {

@@ -7,6 +7,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.Users;
 
 @WebServlet(name = "RegisterServlet", urlPatterns = { "/RegisterServlet" })
 public class RegisterServlet extends HttpServlet {
@@ -29,18 +30,31 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
     String userName = request.getParameter("username");
     String passWord = request.getParameter("password");
     String email = request.getParameter("email");
-    boolean isAdmin = false; // Assuming user is not admin by default
+    
+    if(new UserDAO().findByEmail(email) != null){
+        request.setAttribute("errorMessage", "email already exist");
+        request.getRequestDispatcher("register.jsp").forward(request, response);
+    }
+    else if(new UserDAO().findByUserName(userName) != null){
+        request.setAttribute("errorMessage", "Username already exist");
+        request.getRequestDispatcher("register.jsp").forward(request, response);
+    }
+    else{
+        boolean isLecturer = false; // Assuming user is not admin by default
 
-    // Perform user registration
-    UserDAO userDAO = new UserDAO();
-    boolean registered = userDAO.registerUser(userName, passWord, email,  isAdmin);
+        // Perform user registration
+        UserDAO userDAO = new UserDAO();
+        boolean registered = userDAO.registerUser(userName, passWord, email,  isLecturer);
 
-    if (registered) {
-        // Redirect to registration success page
-        response.sendRedirect("registerSuccess.jsp");
-    } else {
-        // Redirect to registration failure page
-        response.sendRedirect("registerFail.jsp");
+        if (registered) {
+            // Redirect to registration success page
+            request.setAttribute("successMessage", "Register successful");
+            request.getRequestDispatcher("register.jsp").forward(request, response);
+        } else {
+            // Redirect to registration failure page
+            request.setAttribute("errorMessage", "Register fail");
+            request.getRequestDispatcher("register.jsp").forward(request, response);
+        }
     }
 }
 
