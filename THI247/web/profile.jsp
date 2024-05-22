@@ -13,15 +13,16 @@
     <div class="container">
         <div class="main-body">
             <%
-            Users user = (Users)session.getAttribute("currentUser");
-            String role;
-            if(user.getRole() == 1) role = "Admin";
-            else if(user.getRole() == 2) role = "Lecture";
-            else role = "Student";
-            String password = "";
-            for(int i = 0; i < user.getPassword().length(); i++){
-                password += "*";
-            }
+            if(session.getAttribute("currentUser") != null){
+                Users user = (Users)session.getAttribute("currentUser");
+                String role;
+                if(user.getRole() == 1) role = "Admin";
+                else if(user.getRole() == 2) role = "Lecture";
+                else role = "Student";
+                String password = "";
+                for(int i = 0; i < user.getPassword().length(); i++){
+                    password += "*";
+                }
             %>
         
               <!-- Breadcrumb -->
@@ -180,7 +181,9 @@
                   </div> -->
     
     
-    
+    <%
+        }
+    %>
                 </div>
               </div>
     

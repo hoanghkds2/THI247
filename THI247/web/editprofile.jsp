@@ -17,7 +17,8 @@
               <!-- /Breadcrumb -->
         <br><br>
          <%
-         Users user = (Users)session.getAttribute("currentUser");
+        if(session.getAttribute("currentUser") != null){
+        Users user = (Users)session.getAttribute("currentUser");
         String role;
         if(user.getRole() == 1) role = "Admin";
         else if(user.getRole() == 2) role = "Lecture";
@@ -162,6 +163,9 @@
                 </div>
             </div>
         </div>
+        <%
+            }
+        %>
         <jsp:include page="footer.jsp"></jsp:include>
     <!-- Back to Top -->
     <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
