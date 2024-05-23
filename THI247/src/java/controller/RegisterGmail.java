@@ -6,7 +6,6 @@ package controller;
 
 import DAO.UserDAO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,7 +17,7 @@ import model.Users;
  *
  * @author GoldCandy
  */
-public class UpdateController extends HttpServlet {
+public class RegisterGmail extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,44 +31,19 @@ public class UpdateController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String fullname = request.getParameter("fullname");
-        String username = request.getParameter("username");
-        String oldPassword = request.getParameter("oldPassword");
-        if(oldPassword == null) oldPassword = "";
-        String newPassword = request.getParameter("newPassword");
-        if(newPassword == null) newPassword = "";
+        String password = request.getParameter("password");
         String confirmPassword = request.getParameter("confirmPassword");
-        if(confirmPassword == null) confirmPassword = "";
-        
-        HttpSession session = request.getSession();
-        Users user = (Users)session.getAttribute("currentUser");
-        if(user.getPassword().isEmpty()){
-            response.sendRedirect("registerGmail.jsp");
-        }
-        
-        if(!oldPassword.isEmpty() && !newPassword.isEmpty() && !confirmPassword.isEmpty()){
-            if(!oldPassword.equals(user.getPassword())){
-                request.setAttribute("message_password", "Wrong password");
-                request.getRequestDispatcher("editprofile.jsp").forward(request, response);
-            }
-            if(!newPassword.equals(confirmPassword)){
-                request.setAttribute("message_confirm", "Password is not match");
-                request.getRequestDispatcher("editprofile.jsp").forward(request, response);
-            }
-            else{
-                new UserDAO().updateInfo(user.getEmail(), username, fullname, newPassword);
-                request.setAttribute("message", "Success");
-                user = new UserDAO().findByEmail(user.getEmail());
-                session.setAttribute("currentUser", user);
-                request.getRequestDispatcher("profile.jsp").forward(request, response);
-            }
+        if(!password.equals(confirmPassword)){
+            request.setAttribute("errorMessage", "Password not match");
+            request.getRequestDispatcher("registerGmail.jsp").forward(request, response);
         }
         else{
-            new UserDAO().updateInfo(user.getEmail(), username, fullname, user.getPassword());
-            request.setAttribute("message", "Successe");
+            HttpSession session = request.getSession();
+            Users user = (Users)session.getAttribute("currentUser");
+            new UserDAO().updateInfo(user.getEmail(), user.getUsername(), user.getFullname(), password);
             user = new UserDAO().findByEmail(user.getEmail());
             session.setAttribute("currentUser", user);
-            request.getRequestDispatcher("profile.jsp").forward(request, response);
+            response.sendRedirect("Home");
         }
     }
 

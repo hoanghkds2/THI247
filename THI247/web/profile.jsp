@@ -8,13 +8,13 @@
 </style>
 <jsp:include page="header.jsp"></jsp:include>
   
-
+    
 
     <div class="container">
         <div class="main-body">
             <%
                     Users user = (Users)session.getAttribute("currentUser");
-                    if(user != null){
+                    if(user != null && !user.getPassword().isEmpty()){
                     String role;
                     if(user.getRole() == 1) role = "Admin";
                     else if(user.getRole() == 2) role = "Lecture";

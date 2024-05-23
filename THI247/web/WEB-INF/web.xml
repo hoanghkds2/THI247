@@ -32,6 +32,10 @@
         <servlet-name>avatarUpdate</servlet-name>
         <servlet-class>controller.avatarUpdate</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>RegisterGmail</servlet-name>
+        <servlet-class>controller.RegisterGmail</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Home</servlet-name>
         <url-pattern>/Home</url-pattern>
@@ -51,5 +55,9 @@
     <servlet-mapping>
         <servlet-name>avatarUpdate</servlet-name>
         <url-pattern>/avatarUpdate</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RegisterGmail</servlet-name>
+        <url-pattern>/RegisterGmail</url-pattern>
     </servlet-mapping>
 </web-app>

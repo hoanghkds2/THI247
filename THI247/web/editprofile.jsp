@@ -18,7 +18,7 @@
         <br><br>
          <%
         Users user = (Users)session.getAttribute("currentUser");
-        if(user != null){
+        if(user != null && !user.getPassword().isEmpty()){
         String role;
         if(user.getRole() == 1) role = "Admin";
         else if(user.getRole() == 2) role = "Lecture";

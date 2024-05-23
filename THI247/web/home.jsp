@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html" pageEncoding="UTF-8" import="DAO.*, java.util.*, model.*"%>
 <jsp:include page="header.jsp"></jsp:include>
         <!-- Carousel Start -->
         <div class="container-fluid p-0 mb-5">
@@ -408,6 +408,7 @@
                 </div>
             </div>
         </div>
+ 
         <!-- Testimonial End -->
     <jsp:include page="footer.jsp"></jsp:include>
 

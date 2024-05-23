@@ -15,7 +15,7 @@
    
                         <form class="bg-white rounded shadow-5-strong p-5" action="login" method="POST">
                             <!-- Email input -->
-                            
+                            <h5 class="card-title text-center mb-5 fw-light fs-5">Login</h5>
                             <div class="form-outline mb-4" data-mdb-input-init>
                                 <input type="email" id="form1Example1" class="form-control" placeholder="Email" name="email" />
                             </div>
@@ -41,7 +41,7 @@
                             </div>
                             <div class="col">
                                 <!-- Simple link -->
-                                <span>You don't have any account yet,register
+                                <span>You don't have any account yet,register 
                                     <a href="register.jsp">here</a></span>
                             </div>
                             <br>
@@ -53,7 +53,9 @@
                         </form>
                     </div>
                     <div class="button-group text-center mt-4">
-                        <div><i class="fa-brands fa-google"></i> SIGN IN WITH GOOGLE</div>
+                        <a href="https://accounts.google.com/o/oauth2/auth?scope=https://www.googleapis.com/auth/userinfo.profile%20https://www.googleapis.com/auth/userinfo.email&redirect_uri=http://localhost:8080/THI247/LoginGoogleHandler&response_type=code&client_id=1029812003567-92uoqu8gm9iuqafta301erqdqjine7pc.apps.googleusercontent.com&approval_prompt=force">
+                            <i class="fa-brands fa-google"></i> SIGN IN WITH GOOGLE
+                        </a>
                     </div>
                 </div>
             </div>

@@ -17,6 +17,7 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import model.Users;
 
 /**
  *
@@ -121,8 +122,44 @@ public class Filters implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         String url = httpRequest.getServletPath();
-        
         HttpSession session = httpRequest.getSession(false);
+        Users user;
+        
+        //auto Home
+        if(url.contains("home.jsp")){
+            httpResponse.sendRedirect("Home");
+        }
+        
+        //Required password when password is null
+        if(url.contains("profile.jsp")){
+            if(session.getAttribute("currentUser") != null){
+                user = (Users)session.getAttribute("currentUser");
+                if(user.getPassword().isEmpty())
+                    httpResponse.sendRedirect("registerGmail.jsp");
+            }
+        }
+        else if(url.contains("editprofile.jsp")){
+            if(session.getAttribute("currentUser") != null){
+                user = (Users)session.getAttribute("currentUser");
+                if(user.getPassword().isEmpty())
+                    httpResponse.sendRedirect("registerGmail.jsp");
+            }
+        }
+        else if(url.contains("avatarUpdate")){
+            if(session.getAttribute("currentUser") != null){
+                user = (Users)session.getAttribute("currentUser");
+                if(user.getPassword().isEmpty())
+                    httpResponse.sendRedirect("registerGmail.jsp");
+            }
+        }
+        else if(url.contains("admin.jsp")){
+            if(session.getAttribute("currentUser") != null){
+                user = (Users)session.getAttribute("currentUser");
+                if(user.getPassword().isEmpty())
+                    httpResponse.sendRedirect("registerGmail.jsp");
+            }
+        }
+        
         //prevent login register when logged in
         if(url.contains("login.jsp") || url.contains("register.jsp")){
             if(session.getAttribute("currentUser") != null){
@@ -130,15 +167,29 @@ public class Filters implements Filter {
             }
         }
         
-        if(session.getAttribute("currentUser") == null && url.contains("admin.jsp")){
+        //redirect to login when session is null
+        if(url.contains("admin.jsp") && session.getAttribute("currentUser") == null){
             httpResponse.sendRedirect("login.jsp");
         }
-        else if(session.getAttribute("currentUser") == null && url.contains("profile.jsp")){
+        else if(url.contains("profile.jsp") && session.getAttribute("currentUser") == null){
             httpResponse.sendRedirect("login.jsp");
         }
-        else if(session.getAttribute("currentUser") == null && url.contains("editprofile.jsp")){
+        else if(url.contains("editprofile.jsp") && session.getAttribute("currentUser") == null){
             httpResponse.sendRedirect("login.jsp");
         }
+        else if(url.contains("update") && session.getAttribute("currentUser") == null){
+            httpResponse.sendRedirect("login.jsp");
+        }
+        else if(url.contains("avatarUpdate") && session.getAttribute("currentUser") == null){
+            httpResponse.sendRedirect("login.jsp");
+        }
+        else if(url.contains("registerGmail.jsp") && session.getAttribute("currentUser") == null){
+            httpResponse.sendRedirect("login.jsp");
+        }
+        else if(url.contains("RegisterGmail") && session.getAttribute("currentUser") == null){
+            httpResponse.sendRedirect("login.jsp");
+        }
+        
 
         // If there was a problem, we want to rethrow it if it is
         // a known type, otherwise log it.
