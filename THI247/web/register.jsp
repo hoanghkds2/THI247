@@ -43,7 +43,7 @@
                 </div>
                 <div class="button-group text-center mt-4">
                     <a href="https://accounts.google.com/o/oauth2/auth?scope=https://www.googleapis.com/auth/userinfo.profile%20https://www.googleapis.com/auth/userinfo.email&redirect_uri=http://localhost:8080/THI247/LoginGoogleHandler&response_type=code&client_id=1029812003567-92uoqu8gm9iuqafta301erqdqjine7pc.apps.googleusercontent.com&approval_prompt=force">
-                        <i class="fa-brands fa-google"></i> SIGN IN WITH GOOGLE
+                        <i class="fa-brands fa-google"></i> SIGN UP WITH GOOGLE
                     </a>
                 </div>
             </div>

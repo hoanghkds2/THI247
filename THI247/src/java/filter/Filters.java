@@ -190,6 +190,13 @@ public class Filters implements Filter {
             httpResponse.sendRedirect("login.jsp");
         }
         
+        //prevent admin page when user is not admin
+        if(url.contains("admin.jsp") && session.getAttribute("currentUser") != null){
+            user = (Users)session.getAttribute("currentUser");
+            if(user.getRole() != 1){
+                httpResponse.sendRedirect("404.jsp");
+            }
+        }
 
         // If there was a problem, we want to rethrow it if it is
         // a known type, otherwise log it.
